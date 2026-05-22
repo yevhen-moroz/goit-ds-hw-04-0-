@@ -4,12 +4,8 @@ from surprise import SVD, SVDpp, NMF
 from surprise.model_selection import cross_validate
 from surprise.model_selection import GridSearchCV
 
-# Завантаження датасету MovieLens 100k
 data = Dataset.load_builtin('ml-100k')
 
-# =========================
-# 1. SVD + підбір параметрів
-# =========================
 
 param_grid = {
     "n_factors": [50, 100],
@@ -34,10 +30,9 @@ print(gs.best_score['rmse'])
 print("\nНайкращі параметри:")
 print(gs.best_params['rmse'])
 
-# Найкраща модель SVD
+
 best_svd = gs.best_estimator['rmse']
 
-# Оцінка моделі
 results_svd = cross_validate(
     best_svd,
     data,
@@ -46,9 +41,7 @@ results_svd = cross_validate(
     verbose=True
 )
 
-# =========================
-# 2. SVD++
-# =========================
+
 
 svdpp = SVDpp()
 
@@ -60,9 +53,7 @@ results_svdpp = cross_validate(
     verbose=True
 )
 
-# =========================
-# 3. NMF
-# =========================
+
 
 nmf = NMF()
 
@@ -74,17 +65,11 @@ results_nmf = cross_validate(
     verbose=True
 )
 
-# =========================
-# Порівняння моделей
-# =========================
 
 print("\nСередній RMSE:")
 
-print("SVD:",
-      results_svd['test_rmse'].mean())
+print("SVD:", results_svd['test_rmse'].mean())
 
-print("SVD++:",
-      results_svdpp['test_rmse'].mean())
+print("SVD++:", results_svdpp['test_rmse'].mean())
 
-print("NMF:",
-      results_nmf['test_rmse'].mean())
+print("NMF:", results_nmf['test_rmse'].mean())
